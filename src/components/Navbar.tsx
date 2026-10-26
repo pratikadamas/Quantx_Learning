@@ -9,6 +9,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Browse Resources", href: "/resources" },
+    { label: "PYQ Papers", href: "/pyqs" },
   ];
 
   return (

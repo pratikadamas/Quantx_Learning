@@ -1,4 +1,4 @@
-import { Course, Semester, Subject, Unit, Resource } from "@/types/resource";
+import { Course, Semester, Subject, Unit, Resource, PYQ, ExamType } from "@/types/resource";
 
 export const MOCK_COURSES: Course[] = [
   {
@@ -498,3 +498,694 @@ export function getResourcesForSubject(
 
   return list;
 }
+
+// -------------------------------------------------------------
+// Previous Year Questions (PYQs) Mock Data & Helpers
+// Backed by the PYQ Prisma Model (subjectId, year, examType, fileUrl)
+// -------------------------------------------------------------
+
+export const MOCK_PYQS: PYQ[] = [
+  // --- Data Structures (ETCS-201, Sem 3, B.Tech CSE) ---
+  {
+    id: "pyq-ds-2025-end",
+    subjectId: "cse-s3-ds",
+    year: 2025,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/ds-2025-end-term.pdf",
+    fileSize: "2.4 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2025-06-12T10:00:00Z",
+  },
+  {
+    id: "pyq-ds-2024-end",
+    subjectId: "cse-s3-ds",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/ds-2024-end-term.pdf",
+    fileSize: "2.1 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-06-15T09:30:00Z",
+  },
+  {
+    id: "pyq-ds-2024-mid",
+    subjectId: "cse-s3-ds",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/ds-2024-mid-term.pdf",
+    fileSize: "1.2 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2024-03-20T11:00:00Z",
+  },
+  {
+    id: "pyq-ds-2024-prac",
+    subjectId: "cse-s3-ds",
+    year: 2024,
+    examType: "PRACTICAL",
+    fileUrl: "/sample-papers/ds-2024-lab-viva.pdf",
+    fileSize: "1.5 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: true,
+    totalMarks: 40,
+    createdAt: "2024-05-28T14:00:00Z",
+  },
+  {
+    id: "pyq-ds-2023-end",
+    subjectId: "cse-s3-ds",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/ds-2023-end-term.pdf",
+    fileSize: "1.9 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2023-06-18T10:00:00Z",
+  },
+  {
+    id: "pyq-ds-2023-mid",
+    subjectId: "cse-s3-ds",
+    year: 2023,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/ds-2023-mid-term.pdf",
+    fileSize: "1.1 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2023-03-22T10:30:00Z",
+  },
+  {
+    id: "pyq-ds-2022-end",
+    subjectId: "cse-s3-ds",
+    year: 2022,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/ds-2022-end-term.pdf",
+    fileSize: "1.8 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2022-06-20T09:00:00Z",
+  },
+  {
+    id: "pyq-ds-2021-end",
+    subjectId: "cse-s3-ds",
+    year: 2021,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/ds-2021-end-term.pdf",
+    fileSize: "1.6 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2021-06-14T09:00:00Z",
+  },
+
+  // --- Database Management Systems (ETCS-203, Sem 3, B.Tech CSE) ---
+  {
+    id: "pyq-dbms-2025-end",
+    subjectId: "cse-s3-dbms",
+    year: 2025,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dbms-2025-end-term.pdf",
+    fileSize: "2.3 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2025-06-10T10:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2024-end",
+    subjectId: "cse-s3-dbms",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dbms-2024-end-term.pdf",
+    fileSize: "2.0 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-06-12T10:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2024-mid",
+    subjectId: "cse-s3-dbms",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/dbms-2024-mid-term.pdf",
+    fileSize: "1.3 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: true,
+    totalMarks: 30,
+    createdAt: "2024-03-18T14:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2023-end",
+    subjectId: "cse-s3-dbms",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dbms-2023-end-term.pdf",
+    fileSize: "1.8 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2023-06-16T10:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2023-mid",
+    subjectId: "cse-s3-dbms",
+    year: 2023,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/dbms-2023-mid-term.pdf",
+    fileSize: "1.0 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2023-03-19T11:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2023-prac",
+    subjectId: "cse-s3-dbms",
+    year: 2023,
+    examType: "PRACTICAL",
+    fileUrl: "/sample-papers/dbms-2023-practical-sql.pdf",
+    fileSize: "1.4 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: true,
+    totalMarks: 40,
+    createdAt: "2023-05-30T10:00:00Z",
+  },
+  {
+    id: "pyq-dbms-2022-end",
+    subjectId: "cse-s3-dbms",
+    year: 2022,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dbms-2022-end-term.pdf",
+    fileSize: "1.7 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2022-06-19T09:30:00Z",
+  },
+
+  // --- Computer Architecture & Organization (ETCS-205, Sem 3, B.Tech CSE) ---
+  {
+    id: "pyq-co-2024-end",
+    subjectId: "cse-s3-co",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/co-2024-end-term.pdf",
+    fileSize: "2.2 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2024-06-18T10:00:00Z",
+  },
+  {
+    id: "pyq-co-2024-mid",
+    subjectId: "cse-s3-co",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/co-2024-mid-term.pdf",
+    fileSize: "1.1 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2024-03-25T10:00:00Z",
+  },
+  {
+    id: "pyq-co-2023-end",
+    subjectId: "cse-s3-co",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/co-2023-end-term.pdf",
+    fileSize: "1.9 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2023-06-21T09:30:00Z",
+  },
+  {
+    id: "pyq-co-2022-end",
+    subjectId: "cse-s3-co",
+    year: 2022,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/co-2022-end-term.pdf",
+    fileSize: "1.6 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2022-06-25T10:00:00Z",
+  },
+
+  // --- Discrete Mathematics (ETMA-207, Sem 3, B.Tech CSE) ---
+  {
+    id: "pyq-dm-2024-end",
+    subjectId: "cse-s3-dm",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dm-2024-end-term.pdf",
+    fileSize: "2.5 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-06-22T10:00:00Z",
+  },
+  {
+    id: "pyq-dm-2024-mid",
+    subjectId: "cse-s3-dm",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/dm-2024-mid-term.pdf",
+    fileSize: "1.2 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2024-03-28T11:00:00Z",
+  },
+  {
+    id: "pyq-dm-2023-end",
+    subjectId: "cse-s3-dm",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/dm-2023-end-term.pdf",
+    fileSize: "2.1 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2023-06-24T10:00:00Z",
+  },
+  {
+    id: "pyq-dm-2022-other",
+    subjectId: "cse-s3-dm",
+    year: 2022,
+    examType: "OTHER",
+    fileUrl: "/sample-papers/dm-2022-special-reappear.pdf",
+    fileSize: "1.8 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2022-09-15T14:00:00Z",
+  },
+
+  // --- Operating Systems (ETCS-202, Sem 4, B.Tech CSE) ---
+  {
+    id: "pyq-os-2025-end",
+    subjectId: "cse-s4-os",
+    year: 2025,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/os-2025-end-term.pdf",
+    fileSize: "2.3 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2025-12-14T10:00:00Z",
+  },
+  {
+    id: "pyq-os-2024-end",
+    subjectId: "cse-s4-os",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/os-2024-end-term.pdf",
+    fileSize: "2.2 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-12-18T10:00:00Z",
+  },
+  {
+    id: "pyq-os-2024-mid",
+    subjectId: "cse-s4-os",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/os-2024-mid-term.pdf",
+    fileSize: "1.3 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2024-10-10T11:00:00Z",
+  },
+  {
+    id: "pyq-os-2023-end",
+    subjectId: "cse-s4-os",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/os-2023-end-term.pdf",
+    fileSize: "1.9 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2023-12-15T09:30:00Z",
+  },
+
+  // --- Design & Analysis of Algorithms (ETCS-204, Sem 4, B.Tech CSE) ---
+  {
+    id: "pyq-algo-2024-end",
+    subjectId: "cse-s4-algo",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/algo-2024-end-term.pdf",
+    fileSize: "2.4 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-12-20T10:00:00Z",
+  },
+  {
+    id: "pyq-algo-2023-end",
+    subjectId: "cse-s4-algo",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/algo-2023-end-term.pdf",
+    fileSize: "2.0 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2023-12-22T10:00:00Z",
+  },
+  {
+    id: "pyq-algo-2024-mid",
+    subjectId: "cse-s4-algo",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/algo-2024-mid-term.pdf",
+    fileSize: "1.1 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: false,
+    totalMarks: 30,
+    createdAt: "2024-10-14T10:30:00Z",
+  },
+
+  // --- Software Engineering (ETCS-206, Sem 4, B.Tech CSE) ---
+  {
+    id: "pyq-se-2024-end",
+    subjectId: "cse-s4-se",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/se-2024-end-term.pdf",
+    fileSize: "1.7 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2024-12-23T10:00:00Z",
+  },
+  {
+    id: "pyq-se-2023-end",
+    subjectId: "cse-s4-se",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/se-2023-end-term.pdf",
+    fileSize: "1.5 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2023-12-24T10:00:00Z",
+  },
+
+  // --- Computer Networks (ETIT-203, Sem 3, B.Tech IT) ---
+  {
+    id: "pyq-cn-2024-end",
+    subjectId: "it-s3-cn",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/cn-2024-end-term.pdf",
+    fileSize: "2.1 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-06-15T10:00:00Z",
+  },
+  {
+    id: "pyq-cn-2024-mid",
+    subjectId: "it-s3-cn",
+    year: 2024,
+    examType: "MID_SEM",
+    fileUrl: "/sample-papers/cn-2024-mid-term.pdf",
+    fileSize: "1.2 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: true,
+    totalMarks: 30,
+    createdAt: "2024-03-21T11:00:00Z",
+  },
+  {
+    id: "pyq-cn-2023-end",
+    subjectId: "it-s3-cn",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/cn-2023-end-term.pdf",
+    fileSize: "1.9 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2023-06-17T09:30:00Z",
+  },
+
+  // --- Data Structures & Algorithms (ETIT-201, Sem 3, B.Tech IT) ---
+  {
+    id: "pyq-it-ds-2024-end",
+    subjectId: "it-s3-ds",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/it-ds-2024-end-term.pdf",
+    fileSize: "2.0 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: true,
+    totalMarks: 75,
+    createdAt: "2024-06-14T10:00:00Z",
+  },
+  {
+    id: "pyq-it-ds-2023-end",
+    subjectId: "it-s3-ds",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/it-ds-2023-end-term.pdf",
+    fileSize: "1.8 MB",
+    format: "PDF",
+    pageCount: 4,
+    hasSolution: false,
+    totalMarks: 75,
+    createdAt: "2023-06-19T10:00:00Z",
+  },
+
+  // --- Programming in C (BCA-101, Sem 1, BCA) ---
+  {
+    id: "pyq-c-2024-end",
+    subjectId: "bca-s1-cprog",
+    year: 2024,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/cprog-2024-end-term.pdf",
+    fileSize: "1.8 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: true,
+    totalMarks: 60,
+    createdAt: "2024-01-15T10:00:00Z",
+  },
+  {
+    id: "pyq-c-2024-prac",
+    subjectId: "bca-s1-cprog",
+    year: 2024,
+    examType: "PRACTICAL",
+    fileUrl: "/sample-papers/cprog-2024-lab-viva.pdf",
+    fileSize: "1.2 MB",
+    format: "PDF",
+    pageCount: 2,
+    hasSolution: true,
+    totalMarks: 40,
+    createdAt: "2024-01-22T14:00:00Z",
+  },
+  {
+    id: "pyq-c-2023-end",
+    subjectId: "bca-s1-cprog",
+    year: 2023,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/cprog-2023-end-term.pdf",
+    fileSize: "1.6 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: true,
+    totalMarks: 60,
+    createdAt: "2023-01-18T10:00:00Z",
+  },
+  {
+    id: "pyq-c-2022-end",
+    subjectId: "bca-s1-cprog",
+    year: 2022,
+    examType: "END_SEM",
+    fileUrl: "/sample-papers/cprog-2022-end-term.pdf",
+    fileSize: "1.5 MB",
+    format: "PDF",
+    pageCount: 3,
+    hasSolution: false,
+    totalMarks: 60,
+    createdAt: "2022-01-20T10:00:00Z",
+  },
+];
+
+export const EXAM_TYPE_OPTIONS: { id: string; label: string; shortLabel: string; badgeColor: string }[] = [
+  { id: "ALL", label: "All Exam Types", shortLabel: "All Exams", badgeColor: "zinc" },
+  { id: "END_SEM", label: "End Term Exam (Theory)", shortLabel: "End Term", badgeColor: "indigo" },
+  { id: "MID_SEM", label: "Mid Term Exam (Internal)", shortLabel: "Mid Term", badgeColor: "blue" },
+  { id: "PRACTICAL", label: "Practical / Lab Viva", shortLabel: "Practical", badgeColor: "emerald" },
+  { id: "OTHER", label: "Special / Re-appear Exam", shortLabel: "Other / Re-appear", badgeColor: "amber" },
+];
+
+/**
+ * Enriches a raw PYQ Prisma model object with its relational Subject,
+ * Semester number, and Course information.
+ */
+export function enrichPYQ(pyq: PYQ): PYQ {
+  const subject = getSubjectById(pyq.subjectId);
+  const semester = subject ? MOCK_SEMESTERS.find((s) => s.id === subject.semesterId) : undefined;
+  const course = semester ? getCourseById(semester.courseId) : undefined;
+
+  return {
+    ...pyq,
+    subject,
+    semesterNumber: semester?.number,
+    courseCode: course?.code || course?.name,
+    courseName: course?.name,
+  };
+}
+
+export function getAllPYQs(): PYQ[] {
+  return MOCK_PYQS.map(enrichPYQ);
+}
+
+export function getPYQById(id: string): PYQ | undefined {
+  const raw = MOCK_PYQS.find((p) => p.id === id);
+  return raw ? enrichPYQ(raw) : undefined;
+}
+
+export function getAvailablePYQYears(): number[] {
+  const years = Array.from(new Set(MOCK_PYQS.map((p) => p.year)));
+  return years.sort((a, b) => b - a);
+}
+
+export function getSubjectsForCourse(courseId: string): Subject[] {
+  const semIds = MOCK_SEMESTERS.filter((s) => s.courseId === courseId).map((s) => s.id);
+  return MOCK_SUBJECTS.filter((subj) => semIds.includes(subj.semesterId));
+}
+
+export interface FilterPYQParams {
+  courseId?: string | null;
+  semesterNumber?: number | null;
+  subjectId?: string | null;
+  year?: number | null;
+  examType?: ExamType | string | null;
+  searchQuery?: string | null;
+  sortBy?: "year-desc" | "year-asc";
+}
+
+/**
+ * Filter PYQ papers combining all active filters with strict AND logic.
+ * Also supports text query matching subject title, code, course, year, and exam type.
+ */
+export function getFilteredPYQs(filters: FilterPYQParams): PYQ[] {
+  let list = MOCK_PYQS.map(enrichPYQ);
+
+  // 1. Course filter (AND logic)
+  if (filters.courseId && filters.courseId !== "ALL" && filters.courseId.trim() !== "") {
+    list = list.filter((item) => {
+      const subject = item.subject || getSubjectById(item.subjectId);
+      if (!subject) return false;
+      const sem = MOCK_SEMESTERS.find((s) => s.id === subject.semesterId);
+      return sem?.courseId === filters.courseId;
+    });
+  }
+
+  // 2. Semester filter (AND logic)
+  if (filters.semesterNumber !== undefined && filters.semesterNumber !== null && filters.semesterNumber > 0) {
+    list = list.filter((item) => {
+      const subject = item.subject || getSubjectById(item.subjectId);
+      if (!subject) return false;
+      const sem = MOCK_SEMESTERS.find((s) => s.id === subject.semesterId);
+      return sem?.number === filters.semesterNumber;
+    });
+  }
+
+  // 3. Subject filter (AND logic)
+  if (filters.subjectId && filters.subjectId !== "ALL" && filters.subjectId.trim() !== "") {
+    list = list.filter((item) => item.subjectId === filters.subjectId);
+  }
+
+  // 4. Year filter (AND logic)
+  if (filters.year !== undefined && filters.year !== null && filters.year > 0) {
+    list = list.filter((item) => item.year === filters.year);
+  }
+
+  // 5. Exam Type filter (AND logic)
+  if (filters.examType && filters.examType !== "ALL" && filters.examType.trim() !== "") {
+    list = list.filter((item) => item.examType === filters.examType);
+  }
+
+  // 6. Free-text search query (matches subject name, code, course, year, examType)
+  if (filters.searchQuery && filters.searchQuery.trim().length > 0) {
+    const q = filters.searchQuery.toLowerCase().trim();
+    list = list.filter((item) => {
+      const subjectName = item.subject?.name?.toLowerCase() || "";
+      const subjectCode = item.subject?.code?.toLowerCase() || "";
+      const courseName = item.courseName?.toLowerCase() || "";
+      const courseCode = item.courseCode?.toLowerCase() || "";
+      const yearStr = item.year.toString();
+      const examTypeStr = item.examType.toLowerCase();
+
+      return (
+        subjectName.includes(q) ||
+        subjectCode.includes(q) ||
+        courseName.includes(q) ||
+        courseCode.includes(q) ||
+        yearStr.includes(q) ||
+        examTypeStr.includes(q)
+      );
+    });
+  }
+
+  // Sorting
+  if (filters.sortBy === "year-asc") {
+    list.sort((a, b) => a.year - b.year);
+  } else {
+    // Default: newest first (year-desc)
+    list.sort((a, b) => b.year - a.year);
+  }
+
+  return list;
+}
+

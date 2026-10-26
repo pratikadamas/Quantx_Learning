@@ -69,3 +69,34 @@ export interface HierarchyBreadcrumbItem {
   href?: string;
   active?: boolean;
 }
+
+export interface PYQ {
+  id: string;
+  subjectId: string;
+  subject?: Subject;
+  year: number;
+  examType: ExamType;
+  fileUrl: string;
+  fileSize?: string;
+  format?: string;
+  pageCount?: number;
+  hasSolution?: boolean;
+  totalMarks?: number;
+  semesterNumber?: number;
+  courseCode?: string;
+  courseName?: string;
+  createdAt: string; // ISO date string
+}
+
+export interface PYQFilterState {
+  courseId: string;
+  semesterNumber: number | null;
+  subjectId: string;
+  year: number | null;
+  examType: ExamType | "ALL";
+  searchQuery: string;
+  page: number;
+  pageSize: number;
+  sortBy: "year-desc" | "year-asc";
+}
+

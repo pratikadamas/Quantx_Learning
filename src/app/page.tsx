@@ -45,6 +45,26 @@ export default function Home() {
             </Link>
 
             <Link
+              href="/pyqs"
+              className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50/80 px-6 py-3.5 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-100/80 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-300 dark:hover:bg-blue-900/60"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span>Previous Year Papers (PYQs)</span>
+            </Link>
+
+            <Link
               href="/resources?course=btech-cse&semester=3&subject=cse-s3-ds"
               className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 bg-white px-5 py-3.5 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
