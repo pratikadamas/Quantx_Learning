@@ -1,0 +1,158 @@
+// This is your Prisma schema file for IPU Student Portal
+// V1 schema covering: auth/roles, academic hierarchy, resources, PYQs, question bank, notices
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  MODERATOR
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String? // hashed; null if using OAuth only
+  role      Role     @default(STUDENT)
+  courseId  String?
+  course    Course?  @relation(fields: [courseId], references: [id])
+  semester  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  resources Resource[] @relation("UploadedBy")
+  notices   Notice[]   @relation("PublishedBy")
+}
+
+model Course {
+  id        String     @id @default(cuid())
+  name      String     // e.g. "B.Tech CSE"
+  code      String?    @unique
+  semesters Semester[]
+  users     User[]
+  createdAt DateTime   @default(now())
+}
+
+model Semester {
+  id        String    @id @default(cuid())
+  number    Int       // 1-8
+  courseId  String
+  course    Course    @relation(fields: [courseId], references: [id])
+  subjects  Subject[]
+
+  @@unique([courseId, number])
+}
+
+model Subject {
+  id         String     @id @default(cuid())
+  name       String
+  code       String?
+  semesterId String
+  semester   Semester   @relation(fields: [semesterId], references: [id])
+  units      Unit[]
+  resources  Resource[]
+  pyqs       PYQ[]
+  questions  Question[]
+}
+
+model Unit {
+  id        String     @id @default(cuid())
+  name      String
+  number    Int
+  subjectId String
+  subject   Subject    @relation(fields: [subjectId], references: [id])
+  resources Resource[]
+  questions Question[]
+}
+
+enum ResourceType {
+  NOTES
+  PDF
+  PPT
+  LAB_MANUAL
+  ASSIGNMENT
+  IMPORTANT_QUESTIONS
+  REVISION_MATERIAL
+}
+
+model Resource {
+  id           String       @id @default(cuid())
+  title        String
+  description  String?
+  type         ResourceType
+  fileUrl      String
+  subjectId    String
+  subject      Subject      @relation(fields: [subjectId], references: [id])
+  unitId       String?
+  unit         Unit?        @relation(fields: [unitId], references: [id])
+  uploadedById String
+  uploadedBy   User         @relation("UploadedBy", fields: [uploadedById], references: [id])
+  views        Int          @default(0)
+  downloads    Int          @default(0)
+  createdAt    DateTime     @default(now())
+}
+
+enum ExamType {
+  MID_SEM
+  END_SEM
+  PRACTICAL
+  OTHER
+}
+
+model PYQ {
+  id        String   @id @default(cuid())
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  year      Int
+  examType  ExamType
+  fileUrl   String
+  createdAt DateTime @default(now())
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Question {
+  id         String     @id @default(cuid())
+  subjectId  String
+  subject    Subject    @relation(fields: [subjectId], references: [id])
+  unitId     String?
+  unit       Unit?      @relation(fields: [unitId], references: [id])
+  topic      String?
+  difficulty Difficulty
+  text       String
+  answer     String?
+  createdAt  DateTime   @default(now())
+}
+
+enum NoticeCategory {
+  UNIVERSITY
+  COLLEGE
+  EXAMINATION
+  ACADEMIC
+  REGISTRATION
+  GENERAL
+}
+
+model Notice {
+  id            String         @id @default(cuid())
+  title         String
+  description   String?
+  category      NoticeCategory
+  attachmentUrl String?
+  source        String?
+  published     Boolean        @default(false)
+  publishedById String
+  publishedBy   User           @relation("PublishedBy", fields: [publishedById], references: [id])
+  createdAt     DateTime       @default(now())
+}
